@@ -1,0 +1,13 @@
+h1{
+	color: blue;
+	text-align:center;
+	padding-bottom: 50px;
+}
+.display{
+	display: flex;
+	justify-content: space-around;
+}
+.plus{
+	display: flex;
+	justify-content: center;
+}
