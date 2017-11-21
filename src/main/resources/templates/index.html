@@ -6,7 +6,9 @@
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<div class="header">
 	<h1>Reverse Polish Notation Calculator</h1>
+	</div>
 	<div class="display">
 		<form method="post" action="/enter">
 			<div>
@@ -33,15 +35,16 @@
 					<button>-</button>
 				</form>
 			</div>
-			{{#hasUndoer}}
+			
+		</div>
+		{{/hasTwoOrMoreNumbers}}
+		{{#hasUndoer}}
 			<div>
 				<form class="undo" method="post" action="/undo">
 					<button class="Undo">Undo</button>
 				</form>
 			</div>
 			{{/hasUndoer}}
-		</div>
-		{{/hasTwoOrMoreNumbers}}
 		<div class="list">
 
 			<h2>Stack</h2>

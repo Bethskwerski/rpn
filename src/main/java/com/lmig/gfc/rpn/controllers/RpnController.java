@@ -7,17 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lmig.gfc.rpn.models.AddTwoNumbersTogether;
 import com.lmig.gfc.rpn.models.OneArgumentUndoer;
+import com.lmig.gfc.rpn.models.PushUndoer;
+import com.lmig.gfc.rpn.models.Subtractor;
 import com.lmig.gfc.rpn.models.TwoArgumentUndoer;
+import com.lmig.gfc.rpn.models.Undoer;
 
 @Controller
 public class RpnController {
 	private Stack<Double> stack;
-	private OneArgumentUndoer undoer;
+	private Stack<Undoer> undoers;
+	
 	
 
 	public RpnController() {
 		stack = new Stack<Double>();
+		undoers = new Stack<Undoer>();
 	}
 
 	@GetMapping("/")
@@ -26,14 +32,14 @@ public class RpnController {
 		mv.setViewName("index");
 		mv.addObject("stack", stack);
 		mv.addObject("hasTwoOrMoreNumbers", stack.size() >= 2);
-		mv.addObject("hasUndoer", undoer != null);
+		mv.addObject("hasUndoer", undoers.size()>0);
 		return mv;
 	}
 
 	@PostMapping("/enter")
 	public ModelAndView pushNumberOnToStack(double value) {
 		stack.push(value);
-		undoer = null;
+		undoers.push(new PushUndoer());
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 		return mv;
@@ -41,12 +47,9 @@ public class RpnController {
 
 	@PostMapping("/addition")
 	public ModelAndView addNumber() {
-
-		double first = stack.pop();
-		double second = stack.pop();
-		double result = second + first;
-		stack.push(result);
-		undoer = new TwoArgumentUndoer(first, second);
+		AddTwoNumbersTogether adder = new AddTwoNumbersTogether(stack);
+		adder.goDoIt();
+		undoers.push(adder);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 		return mv;
@@ -54,12 +57,9 @@ public class RpnController {
 
 	@PostMapping("/subtraction")
 	public ModelAndView subtractNumber() {
-
-		double first = stack.pop();
-		double second = stack.pop();
-		double result = second - first;
-		stack.push(result);
-		undoer = new TwoArgumentUndoer(first, second);
+		Subtractor sub = new Subtractor(stack);
+		sub.goDoIt();
+		undoers.push(sub);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 		return mv;
@@ -68,7 +68,7 @@ public class RpnController {
 	public ModelAndView abs() {
 
 		double first = stack.pop();
-		undoer = new OneArgumentUndoer(first);
+		undoers.push(new OneArgumentUndoer(first));
 		double result = Math.abs(first);
 		stack.push(result);
 		ModelAndView mv = new ModelAndView();
@@ -79,8 +79,8 @@ public class RpnController {
 
 	@PostMapping("/undo")
 	public ModelAndView undoAction() {
+		Undoer undoer = undoers.pop();
 		undoer.undo(stack);
-		undoer = null;
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 		return mv;
