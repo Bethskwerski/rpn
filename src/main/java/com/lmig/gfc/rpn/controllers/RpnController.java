@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lmig.gfc.rpn.models.AddTwoNumbersTogether;
+import com.lmig.gfc.rpn.models.DivideTwoNumbersTogether;
+import com.lmig.gfc.rpn.models.MultiplyTwoNumbers;
 import com.lmig.gfc.rpn.models.OneArgumentUndoer;
 import com.lmig.gfc.rpn.models.PushUndoer;
 import com.lmig.gfc.rpn.models.Subtractor;
@@ -60,6 +62,24 @@ public class RpnController {
 		Subtractor sub = new Subtractor(stack);
 		sub.goDoIt();
 		undoers.push(sub);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("redirect:/");
+		return mv;
+	}
+	@PostMapping("/divide")
+	public ModelAndView divideNumber() {
+		DivideTwoNumbersTogether divider = new DivideTwoNumbersTogether(stack);
+		divider.goDoIt();
+		undoers.push(divider);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("redirect:/");
+		return mv;
+	}
+	@PostMapping("/multiply")
+	public ModelAndView multiplyNumber() {
+		MultiplyTwoNumbers multiplier = new MultiplyTwoNumbers(stack);
+		multiplier.goDoIt();
+		undoers.push(multiplier);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 		return mv;

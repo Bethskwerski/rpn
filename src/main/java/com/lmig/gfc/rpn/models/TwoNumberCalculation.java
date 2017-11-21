@@ -2,7 +2,7 @@ package com.lmig.gfc.rpn.models;
 
 import java.util.Stack;
 
-public class TwoNumberCalculation implements Undoer{
+public abstract class TwoNumberCalculation implements Undoer {
 
 	private Stack<Double> stack;
 	private Undoer undoer;
@@ -10,7 +10,7 @@ public class TwoNumberCalculation implements Undoer{
 	public TwoNumberCalculation(Stack<Double> stack) {
 		this.stack = stack;
 	}
-	
+
 	public void goDoIt() {
 
 		double first = stack.pop();
@@ -19,17 +19,13 @@ public class TwoNumberCalculation implements Undoer{
 		stack.push(result);
 		undoer = new TwoArgumentUndoer(first, second);
 	}
-	
-	protected double doMath(double first, double second) {
-		
-		return 0;
-		
-	}
 
-@Override
+	protected abstract double doMath(double first, double second);
+
+	@Override
 	public void undo(Stack<Double> stack) {
 		undoer.undo(stack);
-		
+
 	}
 
 }
