@@ -14,14 +14,22 @@
 			<div>
 				<input type="number" step="any" name="value" autofocus required>
 			</div>
+			
 			<div>
 				<button>Enter</button>
 			</div>
 		</form>
 		<div>
+		<div>
 			<form class="abs" method="post" action="/abs">
 				<button>abs</button>
 			</form>
+		</div>
+		<div> 
+ 			<form method="post" action="/clear"> 
+ 				<button>Clear</button> 
+ 			</form> 
+		</div> 
 		</div>
 		{{#hasTwoOrMoreNumbers}}
 		<div class="allButtons">
@@ -45,8 +53,27 @@
 					<button>*</button>
 				</form>
 			</div>
+			<div>
+				<form class="pow" method="post" action="/pow">
+					<button>^</button>
+				</form>
+			</div>
+			<div> 
+ 			<form method="post" action="/swap"> 
+ 				<button>SWAP</button> 
+ 			</form> 
+ 			</div> 
+			
 		</div>
 		{{/hasTwoOrMoreNumbers}}
+		{{#hasThreeOrMoreNumbers}} 
+		<div> 
+ 			<form method="post" action="/rotate"> 
+ 				<button>Rotate</button> 
+ 			</form> 
+ 		</div> 
+ 		{{/hasThreeOrMoreNumbers}} 
+		
 		{{#hasUndoer}}
 			<div>
 				<form class="undo" method="post" action="/undo">
@@ -54,6 +81,14 @@
 				</form>
 			</div>
 			{{/hasUndoer}}
+			
+			{{#hasRedoer}}
+			<div>
+				<form class="redo" method="post" action="/redo">
+					<button class="Redo">Redo</button>
+				</form>
+			</div>
+			{{/hasRedoer}}
 		<div class="list">
 
 			<h2>Stack</h2>
